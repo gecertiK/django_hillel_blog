@@ -9,8 +9,10 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.cache import cache_page
 
-from .forms import RegisterForm, ContactUsForm
-from .models import Comment, Post, User
+from blog.forms import RegisterForm, ContactUsForm
+from blog.models import Comment, Post, User
+
+from blog.tasks import new_comment, send_mail_to_admin
 
 
 def index(request):
@@ -77,6 +79,8 @@ class CreatePost(LoginRequiredMixin, SuccessMessageMixin, generic.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
+        # text = 'Create new post'
+        # send_mail_to_admin.delay(text)
         send_mail('Post', 'Create new post', 'david@example.com', ['admin@example.com'], fail_silently=False, )
         return super(CreatePost, self).form_valid(form)
 
@@ -106,6 +110,8 @@ class CommentCreateView(SuccessMessageMixin, generic.CreateView):
         }
 
     def form_valid(self, form):
+        # message = 'Create new comment'
+        # new_comment.delay(message)
         send_mail('Comment', 'Create new comment', 'david@example.com', ['admin@example.com'], fail_silently=False, )
         return super(CommentCreateView, self).form_valid(form)
 
