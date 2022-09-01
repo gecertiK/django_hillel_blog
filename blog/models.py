@@ -38,4 +38,3 @@ class UserUrl(User):
 
     def get_absolute_url(self):
         return reverse('user-detail', kwargs={'pk': self.pk})
-
