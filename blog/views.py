@@ -77,14 +77,7 @@ class CreatePost(LoginRequiredMixin, SuccessMessageMixin, generic.CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         post.save()
-        send_mail(
-            'Post',
-            'Create new post',
-            'david@example.com',
-            ['admin@example.com'],
-            fail_silently=False,
-        )
-
+        send_mail('Post', 'Create new post', 'david@example.com', ['admin@example.com'], fail_silently=False, )
         return super(CreatePost, self).form_valid(form)
 
 
@@ -113,13 +106,7 @@ class CommentCreateView(SuccessMessageMixin, generic.CreateView):
         }
 
     def form_valid(self, form):
-        send_mail(
-            'Comment',
-            'Create new comment',
-            'david@example.com',
-            ['admin@example.com'],
-            fail_silently=False,
-        )
+        send_mail('Comment', 'Create new comment', 'david@example.com', ['admin@example.com'], fail_silently=False, )
         return super(CommentCreateView, self).form_valid(form)
 
 
@@ -151,12 +138,7 @@ class MessageAdmin(SuccessMessageMixin, generic.FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        send_mail('MESSAGE',
-                  data['text'],
-                  'admin@gmail.com',
-                  ['example@gmail.com'],
-                  fail_silently=False,
-                  )
+        send_mail('MESSAGE', data['text'], 'admin@gmail.com', ['example@gmail.com'], fail_silently=False, )
         return super(MessageAdmin, self).form_valid(form)
 
 
